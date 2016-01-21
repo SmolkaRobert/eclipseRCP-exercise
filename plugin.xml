@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="booklibrary.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="booklibrary.bookslist.BooksBrowserPerspective"
+            id="booklibrary.bookslist.booksbrowser"
+            name="Books browser">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="booklibrary.bookslist.BooksTableView"
+            id="booklibrary.bookslist.bookstable"
+            name="Books table">
+      </view>
+      <view
+            class="booklibrary.bookslist.BookDetailsView"
+            id="booklibrary.bookslist.bookdetails"
+            name="Book details">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="booklibrary.bookslist.booksbrowser">
+         <view
+               closeable="false"
+               id="booklibrary.bookslist.bookstable"
+               minimized="false"
+               moveable="false"
+               ratio="1"
+               relationship="top"
+               relative="org.eclipse.ui.editorss"
+               showTitle="false"
+               standalone="false">
+         </view>
+         <view
+               closeable="false"
+               id="booklibrary.bookslist.bookdetails"
+               minimized="false"
+               moveable="false"
+               ratio="0.75"
+               relationship="bottom"
+               relative="booklibrary.bookslist.bookstable"
+               showTitle="false"
+               standalone="false">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu">
+         <menu
+               label="File">
+            <command
+                  commandId="org.eclipse.ui.file.exit"
+                  label="Exit">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:booklibrary.bookslist.bookstable">
+         <command
+               commandId="booklibrary.booklist.command.addnewbook"
+               label="Add book"
+               style="push"
+               tooltip="Adds a new book to library">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:booklibrary.bookslist.bookstable">
+         <command
+               commandId="booklibrary.booklist.command.addnewbook"
+               label="Add new book"
+               style="push">
+         </command>
+         <command
+               commandId="booklibrary.booklist.command.editselectedbook"
+               label="Edit book"
+               style="push"
+               tooltip="Edit selected book information">
+         </command>
+         <command
+               commandId="booklibrary.booklist.command.deleteselectedbook"
+               label="Delete book"
+               style="push"
+               tooltip="Delete selected book from library">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="booklibrary.bookslist.handler.AddNewBookHandler"
+            id="booklibrary.booklist.command.addnewbook"
+            name="Add new book">
+      </command>
+      <command
+            id="booklibrary.booklist.command.editselectedbook"
+            name="Edit selected book">
+      </command>
+      <command
+            id="booklibrary.booklist.command.deleteselectedbook"
+            name="Delete selected book">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="booklibrary.bookslist.handler.AddNewBookHandler"
+            commandId="booklibrary.booklist.command.addnewbook">
+      </handler>
+      <handler
+            class="booklibrary.bookslist.handler.EditSelectedBookHandler"
+            commandId="booklibrary.booklist.command.editselectedbook">
+      </handler>
+      <handler
+            class="booklibrary.bookslist.handler.DeleteSelectedBookHandler"
+            commandId="booklibrary.booklist.command.deleteselectedbook">
+      </handler>
+   </extension>
+
+</plugin>
