@@ -9,14 +9,10 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.glassfish.jersey.client.ClientConfig;
 
-import com.google.gson.Gson;
-
-import booklibrary.dataprovider.impl.BooksProviderImpl;
-
 public class RestClient {
 	private static RestClient restClientInstance = null;
 	
-	public RestClient() {
+	private RestClient() {
 	}
 	
 	public static RestClient getInstance() {

@@ -29,6 +29,12 @@ public class EditSelectedBookDialog extends Dialog {
 	}
 
 	@Override
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
+		shell.setText("Book information change");
+	};
+	
+	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
 		GridLayout layout = new GridLayout(2, false);

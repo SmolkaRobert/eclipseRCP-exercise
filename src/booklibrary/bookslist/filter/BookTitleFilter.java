@@ -20,7 +20,7 @@ public class BookTitleFilter extends ViewerFilter {
 			return true;
 		}
 		BookTo book = (BookTo) element;
-		if (book.getTitle().matches(searchedTitle)) {
+		if (book.getTitle().toLowerCase().matches(searchedTitle.toLowerCase())) {
 			return true;
 		}
 

@@ -14,7 +14,7 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="booklibrary.bookslist.BooksBrowserPerspective"
+            class="booklibrary.bookslist.perspective.BooksBrowserPerspective"
             id="booklibrary.bookslist.booksbrowser"
             name="Books browser">
       </perspective>
@@ -22,12 +22,12 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            class="booklibrary.bookslist.BooksTableView"
+            class="booklibrary.bookslist.view.BooksTableView"
             id="booklibrary.bookslist.bookstable"
             name="Books table">
       </view>
       <view
-            class="booklibrary.bookslist.BookDetailsView"
+            class="booklibrary.bookslist.view.BookDetailsView"
             id="booklibrary.bookslist.bookdetails"
             name="Book details">
       </view>
@@ -107,7 +107,6 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="booklibrary.bookslist.handler.AddNewBookHandler"
             id="booklibrary.booklist.command.addnewbook"
             name="Add new book">
       </command>
@@ -134,6 +133,30 @@
             class="booklibrary.bookslist.handler.DeleteSelectedBookHandler"
             commandId="booklibrary.booklist.command.deleteselectedbook">
       </handler>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="booklibrary.application"
+            name="BookLibrary Application Product">
+         <property
+               name="appName"
+               value="BookLibrary Application Product">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="product1"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="booklibrary.application"
+            name="Books library application">
+         <property
+               name="appName"
+               value="Books library application">
+         </property>
+      </product>
    </extension>
 
 </plugin>

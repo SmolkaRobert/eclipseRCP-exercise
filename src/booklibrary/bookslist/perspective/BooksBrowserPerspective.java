@@ -1,4 +1,4 @@
-package booklibrary.bookslist;
+package booklibrary.bookslist.perspective;
 
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;

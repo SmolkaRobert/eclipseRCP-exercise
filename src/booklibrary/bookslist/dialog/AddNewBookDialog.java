@@ -23,6 +23,12 @@ public class AddNewBookDialog extends Dialog {
 	public AddNewBookDialog(Shell parentShell) {
 		super(parentShell);
 	}
+	
+	@Override
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
+		shell.setText("New book addition");
+	};
 
 	@Override
 	protected Control createDialogArea(Composite parent) {

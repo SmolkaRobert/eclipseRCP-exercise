@@ -1,7 +1,10 @@
-package booklibrary.bookslist;
+package booklibrary.bookslist.view;
 
+import java.io.IOException;
+
+import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.databinding.viewers.ViewerSupport;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -19,33 +22,40 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import booklibrary.bookslist.filter.BookTitleFilter;
 import booklibrary.bookslist.sorter.BooksTableViewerComparator;
-import booklibrary.dataprovider.BooksProvider;
-import booklibrary.dataprovider.impl.BooksProviderImpl;
 import booklibrary.model.BookTo;
+import booklibrary.tableinputprovider.TableInputProvider;
 
 public class BooksTableView extends ViewPart {
 
 	private TableViewer booksTableViewer;
-	private BooksProvider booksProvider;
-	
-	
+
 	private BooksTableViewerComparator booksTableComparator;
 	private BookTitleFilter bookTitleFilter;
 
 	public BooksTableView() {
-		this.booksProvider = BooksProviderImpl.getInstance();
 	}
 
 	public void createPartControl(Composite parent) {
 		GridLayout layout = new GridLayout(2, false);
 		parent.setLayout(layout);
+
 		Label searchLabel = new Label(parent, SWT.NONE);
 		searchLabel.setText("Filter: ");
+
 		final Text searchText = new Text(parent, SWT.BORDER | SWT.SEARCH);
 		searchText.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-		createViewer(parent);
+
+		try {
+			createViewer(parent);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
 		// Set the sorter for the table
 		booksTableComparator = new BooksTableViewerComparator();
 		booksTableViewer.setComparator(booksTableComparator);
@@ -63,32 +73,34 @@ public class BooksTableView extends ViewPart {
 				booksTableViewer.refresh();
 			}
 		});
-		
+
 		bookTitleFilter = new BookTitleFilter();
 		booksTableViewer.addFilter(bookTitleFilter);
 	}
 
-	private void createViewer(Composite parent) {
-		booksTableViewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+	private void createViewer(Composite parent) throws JsonParseException, JsonMappingException, IOException {
+		booksTableViewer = new TableViewer(parent,
+				SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+
 		createColumns(parent, booksTableViewer);
+
 		final Table table = booksTableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
-		booksTableViewer.setContentProvider(new ArrayContentProvider());
-		// get the content for the viewer, setInput will call getElements in the
-		// contentProvider
-		
-		booksTableViewer.setInput(booksProvider.getAllBooks());
-		
-	    // Create a menu manager and create context menu
-	    MenuManager menuManager = new MenuManager();
-	    Menu menu = menuManager.createContextMenu(booksTableViewer.getTable());
-	    // set the menu on the SWT widget
-	    booksTableViewer.getTable().setMenu(menu);
-	    // register the menu with the framework
-	    getSite().registerContextMenu(menuManager, booksTableViewer);
-		
+		booksTableViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		booksTableViewer.getTable().setHeaderVisible(true);
+
+		ViewerSupport.bind(booksTableViewer, TableInputProvider.getInstance().getAllBooks(), BeanProperties.values(new String[] { "id", "title", "authors" }));
+
+		// Create a menu manager and create context menu
+		MenuManager menuManager = new MenuManager();
+		Menu menu = menuManager.createContextMenu(booksTableViewer.getTable());
+		// set the menu on the SWT widget
+		booksTableViewer.getTable().setMenu(menu);
+		// register the menu with the framework
+		getSite().registerContextMenu(menuManager, booksTableViewer);
+
 		// make the selection available to other views
 		getSite().setSelectionProvider(booksTableViewer);
 		// set the sorter for the table
@@ -132,7 +144,7 @@ public class BooksTableView extends ViewPart {
 			}
 		});
 
-		// third column for id
+		// third column for authors
 		col = createTableViewerColumn(titles[2], bounds[2], 2);
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override

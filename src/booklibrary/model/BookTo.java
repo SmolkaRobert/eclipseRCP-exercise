@@ -1,22 +1,18 @@
 package booklibrary.model;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-
-public class BookTo {
+public class BookTo extends ModelPropertyObject {
 	private Long id;
 	private String title;
 	private String authors;
-	private String comment;
-	
-	//TODO RSmolka clean up delete unnescesary comments and stuff
-//	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
+	public BookTo() {
+		
+	}
 
 	public BookTo(Long id, String title, String authors) {
 		this.id = id;
 		this.title = title;
 		this.authors = authors;
-		this.comment = "";
 	}
 
 	public BookTo(String bookTitle, String bookAuthors) {
@@ -24,20 +20,12 @@ public class BookTo {
 		this.authors = bookAuthors;
 	}
 
-//	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-//		propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
-//	}
-//
-//	public void removePropertyChangeListener(PropertyChangeListener listener) {
-//		propertyChangeSupport.removePropertyChangeListener(listener);
-//	}
-
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
-//		propertyChangeSupport.firePropertyChange("bookId", this.id, this.id = id);
+//		firePropertyChange("id", this.id, this.id = id);
 		this.id = id;
 	}
 
@@ -46,8 +34,8 @@ public class BookTo {
 	}
 
 	public void setTitle(String title) {
-//		propertyChangeSupport.firePropertyChange("bookTitle", this.title, this.title = title);
-		 this.title = title;
+//		firePropertyChange("title", this.title, this.title = title);
+		this.title = title;
 	}
 
 	public String getAuthors() {
@@ -55,12 +43,49 @@ public class BookTo {
 	}
 
 	public void setAuthors(String authors) {
-//		propertyChangeSupport.firePropertyChange("bookAuthors", this.authors, this.authors = authors);
+//		firePropertyChange("authors", this.authors, this.authors = authors);
 		this.authors = authors;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Book no. " + id + ", " + title + ", " + authors;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((authors == null) ? 0 : authors.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BookTo other = (BookTo) obj;
+		if (authors == null) {
+			if (other.authors != null)
+				return false;
+		} else if (!authors.equals(other.authors))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
 	}
 }
